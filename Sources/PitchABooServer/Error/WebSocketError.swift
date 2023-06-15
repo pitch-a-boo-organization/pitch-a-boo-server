@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum WebSocketError: LocalizedError {
+public enum WebSocketError: LocalizedError {
     case unableToStartInPort(UInt16)
     case unableToInitializeListener
     case serverInitializationFail(String?)
@@ -16,7 +16,7 @@ enum WebSocketError: LocalizedError {
     case cantConnectWithClient
     case connectTimeWasTooLong
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         switch self {
         case .unableToStartInPort(let port):
             return "Não foi possível iniciar o servidor na porta: \(port)"

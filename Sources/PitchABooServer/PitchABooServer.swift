@@ -1,7 +1,7 @@
 import Foundation
 import Network
 
-class PitchABooWebSocketServer {
+public final class PitchABooWebSocketServer {
     var listener: NWListener
     var connectedClients: [NWConnection] = []
     var timer: Timer?
