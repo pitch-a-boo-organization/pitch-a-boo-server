@@ -6,7 +6,7 @@ class PitchABooWebSocketServer {
     var connectedClients: [NWConnection] = []
     var timer: Timer?
         
-    init(port: UInt16) throws {
+    public init(port: UInt16) throws {
         let parameters = NWParameters(tls: nil)
         parameters.allowLocalEndpointReuse = true
         parameters.includePeerToPeer = true
@@ -27,7 +27,7 @@ class PitchABooWebSocketServer {
         }
     }
     
-    func getDeviceHostname() -> String? {
+    public func getServerHostname() -> String? {
         let processInfo = ProcessInfo()
         return processInfo.hostName
     }
@@ -56,7 +56,7 @@ class PitchABooWebSocketServer {
 
 // MARK: - Server Connection Handler
 extension PitchABooWebSocketServer {
-    func startServer(completion: @escaping (WebSocketError?) -> Void ) {
+    public func startServer(completion: @escaping (WebSocketError?) -> Void ) {
         print("Starting Server...")
         let serverQueue = DispatchQueue(label: "ServerQueue")
         
