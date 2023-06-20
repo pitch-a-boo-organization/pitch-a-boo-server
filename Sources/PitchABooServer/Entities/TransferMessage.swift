@@ -8,6 +8,18 @@
 import Foundation
 
 struct TransferMessage: Codable {
-    let type: MessageType
-    let message: String
+    let code: Int
+    let device: Device
+    let message: Data
+    
+    func encodeToTransfer() throws -> Data {
+        return try JSONEncoder().encode(self)
+    }
 }
+
+enum Device: Int, Codable {
+    case iOS = 1
+    case tvOS = 2
+    case coreOS = 3
+}
+
