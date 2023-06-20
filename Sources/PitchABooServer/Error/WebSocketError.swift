@@ -15,6 +15,7 @@ public enum WebSocketError: LocalizedError {
     case unableToSendAMessageToUser
     case cantConnectWithClient
     case connectTimeWasTooLong
+    case unableToEncodeMessage
     
     public var errorDescription: String? {
         switch self {
@@ -32,6 +33,8 @@ public enum WebSocketError: LocalizedError {
             return "A conexão com o cliente falhou"
         case .connectTimeWasTooLong:
             return "O tempo de espera foi muito longo"
+        case .unableToEncodeMessage:
+            return "O processo de preparar a mensagem para envio falhou"
         }
     }
 }
