@@ -16,10 +16,12 @@ public class ServerRouter {
         _ message: TransferMessage,
         from connection: NWConnection
     ) {
-        switch message.code {
-            case .connectionAvailability:
-                let message = DefaultMessage.canConnectMessage(server?.listener.state == .ready).load
-                server?.sendMessageToClient(
+        guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
+        guard let server = server else { return }
+        switch code {
+            case .verifyAvailability:
+                let message = DefaultMessage.canConnectMessage(server.listener.state == .ready).load
+                server.sendMessageToClient(
                     message: message,
                     client: connection,
                     completion: { error in
@@ -28,30 +30,36 @@ public class ServerRouter {
                         }
                     }
                 )
-            case .availabilityStatus:
-                break
             case .connectToSession:
-                server?.connectedClients.append(connection)
-                let message = DefaultMessage.connectMessage(server?.listener.state == .ready).load
-                server?.sendMessageToClient(
+                if server.players.count < 4 {
+                    server.connectedClients.append(connection)
+                    if !Item.availableItems.isEmpty {
+                        guard let playerItem = Item.availableItems.first else { return }
+                        server.players.append(
+                            Player(
+                                id: server.players.count + 1,
+                                name: "Id \(server.players.count + 1)",
+                                bones: 0,
+                                sellingItem: playerItem,
+                                persona: Persona.availablePersonas[server.players.count]
+                            )
+                        )
+                        Item.availableItems.removeFirst()
+                    }
+                }
+                let message = DefaultMessage.connectedPlayers(server.players).load
+                server.sendMessageToClient(
                     message: message,
                     client: connection,
                     completion: { error in
                         if let error = error {
                             print(error.localizedDescription)
                         }
-                    })
-            case .connectionStatus:
-                break
-            case .startGame:
-                break
+                    }
+                )
             case .bid:
                 break
-            case .connectedPlayers:
-                break
-            case .selectedPlayer:
-                break
-            case .saleResult:
+            case .startProcess:
                 break
         }
     }

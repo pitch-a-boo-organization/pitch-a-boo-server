@@ -10,7 +10,6 @@ import Foundation
 enum DefaultMessage {
     case canConnectMessage(Bool)
     case connectMessage(Bool)
-    case availableMessage(Bool)
     case startMessage(Int, Bool)
     case connectedPlayers([Player])
     
@@ -20,8 +19,6 @@ enum DefaultMessage {
             return connectionStatusMessage(connection: connected)
         case .startMessage(let stage, let start):
             return startGameMessage(stage: stage, start: start)
-        case .availableMessage(let available):
-            return availableMessage(available: available)
         case .canConnectMessage(let canConnect):
             return canConnectMessage(canConnect: canConnect)
         case .connectedPlayers(let players):
@@ -33,7 +30,7 @@ enum DefaultMessage {
 extension DefaultMessage {
     func startGameMessage(stage: Int, start: Bool) -> TransferMessage {
         TransferMessage(
-            code: .startGame,
+            code: CommandCode.ServerMessage.startProcess.rawValue,
             device: .coreOS,
             message: try! JSONEncoder().encode(
                 DTOStartProcess(
@@ -46,28 +43,12 @@ extension DefaultMessage {
     
     func connectionStatusMessage(connection: Bool) -> TransferMessage {
         return TransferMessage(
-            code: .connectionStatus,
-            device: .coreOS,
-            message: try! JSONSerialization.data(
-                withJSONObject:
-                    """
-                    {
-                        "stage": 10,
-                        "connected": \(connection)
-                    }
-                    """
-            )
-        )
-    }
-    
-    func availableMessage(available: Bool) -> TransferMessage {
-        return TransferMessage(
-            code: .availabilityStatus,
+            code: CommandCode.ServerMessage.connectionStatus.rawValue,
             device: .coreOS,
             message: try! JSONEncoder().encode(
-                DTOVerifyAvailability(
+                DTOConnectStatus(
                     stage: 10,
-                    available: true
+                    connected: connection
                 )
             )
         )
@@ -75,34 +56,27 @@ extension DefaultMessage {
     
     func canConnectMessage(canConnect: Bool) -> TransferMessage {
         return TransferMessage(
-            code: .availabilityStatus,
+            code: CommandCode.ServerMessage.availabilityStatus.rawValue,
             device: .coreOS,
-            message: try! JSONSerialization.data(
-                withJSONObject:
-                    """
-                    {
-                        "stage": 10,
-                        "canConnect": \(canConnect)
-                    }
-                    """
+            message: try! JSONEncoder().encode(
+                DTOStatusAvailability(
+                    stage: 10,
+                    canConnect: canConnect
+                )
             )
         )
     }
     
     func connectedPlayersMessage(players: [Player]) -> TransferMessage {
         return TransferMessage(
-            code: .connectedPlayers,
+            code: CommandCode.ServerMessage.connectedPlayers.rawValue,
             device: .coreOS,
-            message: try! JSONSerialization.data(
-                withJSONObject:
-                    """
-                    {
-                        "stage": 10,
-                        "players": \(players)
-                    }
-                    """
+            message: try! JSONEncoder().encode(
+                DTOPlayersConnected(
+                    stage: 10,
+                    players: players
+                )
             )
-            
         )
     }
 }

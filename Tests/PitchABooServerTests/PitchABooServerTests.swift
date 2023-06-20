@@ -1,4 +1,5 @@
 import XCTest
+import Network
 @testable import PitchABooServer
 
 final class PitchABooServerTests: XCTestCase {

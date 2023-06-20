@@ -8,7 +8,7 @@
 import Foundation
 
 struct TransferMessage: Codable {
-    let code: CommandCode
+    let code: Int
     let device: Device
     let message: Data
     
