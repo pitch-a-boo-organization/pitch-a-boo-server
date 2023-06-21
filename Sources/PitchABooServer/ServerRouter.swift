@@ -26,7 +26,7 @@ public class ServerRouter {
                     client: connection,
                     completion: { error in
                         if let error = error {
-                            print(error.localizedDescription)
+                            print("\(#function) - Erro: \(error.localizedDescription)")
                         }
                     }
                 )
@@ -35,28 +35,23 @@ public class ServerRouter {
                     server.connectedClients.append(connection)
                     if !Item.availableItems.isEmpty {
                         guard let playerItem = Item.availableItems.first else { return }
-                        server.players.append(
-                            Player(
-                                id: server.players.count + 1,
-                                name: "Id \(server.players.count + 1)",
-                                bones: 0,
-                                sellingItem: playerItem,
-                                persona: Persona.availablePersonas[server.players.count]
-                            )
+                        let player = Player(
+                            id: server.players.count + 1,
+                            name: "Player \(server.players.count + 1)",
+                            bones: 0,
+                            sellingItem: playerItem,
+                            persona: Persona.availablePersonas[server.players.count]
+                        )
+                        server.players.append(player)
+                        server.sendMessageToClient(
+                            message: DefaultMessage.playerIdentifier(player).load,
+                            client: connection,
+                            completion: { _ in }
                         )
                         Item.availableItems.removeFirst()
                     }
                 }
-                let message = DefaultMessage.connectedPlayers(server.players).load
-                server.sendMessageToClient(
-                    message: message,
-                    client: connection,
-                    completion: { error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                        }
-                    }
-                )
+                server.sendMessageToAllClients(DefaultMessage.connectedPlayers(server.players).load)
             case .bid:
                 break
             case .startProcess:

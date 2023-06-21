@@ -62,6 +62,20 @@ public final class PitchABooWebSocketServer {
             completion(.unableToEncodeMessage)
         }
     }
+    
+    internal func sendMessageToAllClients(_ message: TransferMessage) {
+        for connectedClient in connectedClients {
+            sendMessageToClient(
+                message: message,
+                client: connectedClient,
+                completion: { error in
+                    if let error = error {
+                        print("\(#function) - Erro: \(error.localizedDescription)")
+                    }
+                }
+            )
+        }
+    }
 }
 
 // MARK: - Server Connection Handler
@@ -145,14 +159,6 @@ extension PitchABooWebSocketServer {
     ) throws {
         if let message = try? JSONDecoder().decode(TransferMessage.self, from: data) {
             router.redirectMessage(message, from: connection)
-//            switch message.type {
-//                case .connection:
-//                    if message.message == "subscribe" {
-//                        self.connectedClients.append(connection)
-//                    }
-//                case .count:
-//                    break
-//            }
         }
     }
 }
