@@ -58,15 +58,19 @@ public class ServerRouter {
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
                 guard let gameStage = GameStages(rawValue: startProcessDTO.stage) else { return }
-                handleStage(gameStage)
+                handleStartInStage(gameStage)
                 break
         }
     }
     
-    func handleStage(_ stage: GameStages) {
+    func handleStartInStage(_ stage: GameStages) {
         guard let server = server else { return }
         switch stage {
             case .first:
+                break
+            case .second:
+                break
+            case .firstRoundStage:
                 server.gameSession.startGame()
                 guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
                 server.sendMessageToAllClients(
@@ -76,10 +80,6 @@ public class ServerRouter {
                         sellingPlayer.sellingItem
                     ).load
                 )
-                break
-            case .second:
-                break
-            case .firstRoundStage:
                 break
             case .secondRoundStage:
                 break
