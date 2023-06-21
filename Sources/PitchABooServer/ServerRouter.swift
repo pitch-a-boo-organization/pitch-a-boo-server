@@ -18,6 +18,7 @@ public class ServerRouter {
     ) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
         guard let server = server else { return }
+        let session = server.gameSession
         switch code {
             case .verifyAvailability:
                 let message = DefaultMessage.canConnectMessage(server.listener.state == .ready).load
@@ -31,18 +32,18 @@ public class ServerRouter {
                     }
                 )
             case .connectToSession:
-                if server.players.count < 4 {
+                if session.players.count < 4 {
                     server.connectedClients.append(connection)
                     if !Item.availableItems.isEmpty {
                         guard let playerItem = Item.availableItems.first else { return }
                         let player = Player(
-                            id: server.players.count + 1,
-                            name: "Player \(server.players.count + 1)",
+                            id: session.players.count + 1,
+                            name: "Player \(session.players.count + 1)",
                             bones: 0,
                             sellingItem: playerItem,
-                            persona: Persona.availablePersonas[server.players.count]
+                            persona: Persona.availablePersonas[session.players.count]
                         )
-                        server.players.append(player)
+                        server.gameSession.players.append(player)
                         server.sendMessageToClient(
                             message: DefaultMessage.playerIdentifier(player).load,
                             client: connection,
@@ -51,19 +52,29 @@ public class ServerRouter {
                         Item.availableItems.removeFirst()
                     }
                 }
-                server.sendMessageToAllClients(DefaultMessage.connectedPlayers(server.players).load)
+                server.sendMessageToAllClients(DefaultMessage.connectedPlayers(session.players).load)
             case .bid:
                 break
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
-                handleStage(GameStages(rawValue: startProcessDTO.stage)!)
+                guard let gameStage = GameStages(rawValue: startProcessDTO.stage) else { return }
+                handleStage(gameStage)
                 break
         }
     }
     
     func handleStage(_ stage: GameStages) {
+        guard let server = server else { return }
         switch stage {
             case .first:
+                guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
+                server.sendMessageToAllClients(
+                    DefaultMessage.choosePlayer(
+                        stage.rawValue,
+                        sellingPlayer,
+                        sellingPlayer.sellingItem
+                    ).load
+                )
                 break
             case .second:
                 break

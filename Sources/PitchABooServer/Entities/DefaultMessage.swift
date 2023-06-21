@@ -13,6 +13,7 @@ enum DefaultMessage {
     case startMessage(Int, Bool)
     case connectedPlayers([Player])
     case playerIdentifier(Player)
+    case choosePlayer(Int, Player, Item)
     
     var load: TransferMessage {
         switch self {
@@ -26,6 +27,8 @@ enum DefaultMessage {
             return connectedPlayersMessage(players: players)
         case .playerIdentifier(let player):
             return playerIdentifier(player: player)
+        case .choosePlayer(let stage, let player, let item):
+            return choosePlayer(stage: stage, player: player, item: item)
         }
     }
 }
@@ -92,6 +95,16 @@ extension DefaultMessage {
                     stage: 10,
                     player: player
                 )
+            )
+        )
+    }
+    
+    func choosePlayer(stage: Int, player: Player, item: Item) -> TransferMessage {
+        return TransferMessage(
+            code: stage,
+            device: .coreOS,
+            message: try! JSONEncoder().encode(
+                DTOChosenPlayer(stage: stage, player: player, item: item)
             )
         )
     }

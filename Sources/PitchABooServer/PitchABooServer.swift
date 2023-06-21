@@ -3,9 +3,9 @@ import Network
 
 public final class PitchABooWebSocketServer {
     private var router: ServerRouter
+    var gameSession: GameSession = GameSession()
     var listener: NWListener
     var connectedClients: [NWConnection] = []
-    var players: [Player] = []
     var timer: Timer?
         
     public init(port: UInt16, router: ServerRouter = ServerRouter()) throws {
