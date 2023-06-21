@@ -55,6 +55,27 @@ public class ServerRouter {
             case .bid:
                 break
             case .startProcess:
+                let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
+                handleStage(GameStages(rawValue: startProcessDTO.stage)!)
+                break
+        }
+    }
+    
+    func handleStage(_ stage: GameStages) {
+        switch stage {
+            case .first:
+                break
+            case .second:
+                break
+            case .firstStageOfShift:
+                break
+            case .secondStageOfShift:
+                break
+            case .thirdStageOfShift:
+                break
+            case .fourthStageOfShift:
+                break
+            case .fifthStageOfShift:
                 break
         }
     }
