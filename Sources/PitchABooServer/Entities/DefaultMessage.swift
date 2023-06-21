@@ -12,6 +12,7 @@ enum DefaultMessage {
     case connectMessage(Bool)
     case startMessage(Int, Bool)
     case connectedPlayers([Player])
+    case playerIdentifier(Player)
     
     var load: TransferMessage {
         switch self {
@@ -23,6 +24,8 @@ enum DefaultMessage {
             return canConnectMessage(canConnect: canConnect)
         case .connectedPlayers(let players):
             return connectedPlayersMessage(players: players)
+        case .playerIdentifier(let player):
+            return playerIdentifier(player: player)
         }
     }
 }
@@ -75,6 +78,19 @@ extension DefaultMessage {
                 DTOPlayersConnected(
                     stage: 10,
                     players: players
+                )
+            )
+        )
+    }
+    
+    func playerIdentifier(player: Player) -> TransferMessage {
+        return TransferMessage(
+            code: CommandCode.ServerMessage.playerIdentifier.rawValue,
+            device: .coreOS,
+            message: try! JSONEncoder().encode(
+                DTOPlayerIdentifier(
+                    stage: 10,
+                    player: player
                 )
             )
         )
