@@ -138,7 +138,7 @@ extension PitchABooWebSocketServer {
             switch state {
                 case .ready:
                     self.sendMessageToClient(
-                        message: DefaultMessage.canConnectMessage(true).load,
+                        message: DefaultMessage.canConnectMessage(!self.gameSession.gameHasStarted).load,
                         client: connection,
                         completion: completion
                     )

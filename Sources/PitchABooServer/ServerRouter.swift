@@ -67,6 +67,7 @@ public class ServerRouter {
         guard let server = server else { return }
         switch stage {
             case .first:
+                server.gameSession.startGame()
                 guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
                 server.sendMessageToAllClients(
                     DefaultMessage.choosePlayer(

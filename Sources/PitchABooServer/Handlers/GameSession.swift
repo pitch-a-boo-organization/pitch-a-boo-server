@@ -9,6 +9,7 @@ import Foundation
 
 class GameSession {
     private var hasSelling: [Player] = []
+    private(set) var gameHasStarted = false
     var players: [Player] = []
     
     func chooseSellingPlayer() -> Player? {
@@ -18,5 +19,9 @@ class GameSession {
             }
         }
         return nil
+    }
+    
+    func startGame() {
+        gameHasStarted.toggle()
     }
 }
