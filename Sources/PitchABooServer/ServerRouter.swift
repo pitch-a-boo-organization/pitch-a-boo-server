@@ -67,15 +67,15 @@ public class ServerRouter {
                 break
             case .second:
                 break
-            case .firstStageOfShift:
+            case .firstRoundStage:
                 break
-            case .secondStageOfShift:
+            case .secondRoundStage:
                 break
-            case .thirdStageOfShift:
+            case .thirdRoundStage:
                 break
-            case .fourthStageOfShift:
+            case .fourthRoundStage:
                 break
-            case .fifthStageOfShift:
+            case .fiftyRoundStage:
                 break
         }
     }
