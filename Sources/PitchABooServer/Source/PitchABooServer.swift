@@ -1,15 +1,15 @@
 import Foundation
 import Network
 
-public final class PitchABooWebSocketServer {
-    private var router: ServerRouter
+public final class PitchABooWebSocketServer: Server {
+    
+    var connectedClients: [Connection] = []
     var gameSession: GameSession = GameSession()
     var listener: NWListener
-    var connectedClients: [NWConnection] = []
     var timer: Timer?
-        
-    public init(port: UInt16, router: ServerRouter = ServerRouter()) throws {
-        self.router = router
+    private var router: ServerRouter = ServerRouter()
+    
+    public init(port: UInt16) throws {
         let parameters = NWParameters(tls: nil)
         parameters.allowLocalEndpointReuse = true
         parameters.includePeerToPeer = true
@@ -31,6 +31,10 @@ public final class PitchABooWebSocketServer {
         router.server = self
     }
     
+    func getServerState() -> NWListener.State {
+        return listener.state
+    }
+    
     public func getServerHostname() -> String? {
         let processInfo = ProcessInfo()
         return processInfo.hostName
@@ -38,7 +42,7 @@ public final class PitchABooWebSocketServer {
     
     internal func sendMessageToClient(
         message: TransferMessage,
-        client: NWConnection,
+        client: Connection,
         completion: @escaping (WebSocketError?) -> Void
     ) {
         let metadata = NWProtocolWebSocket.Metadata(opcode: .binary)
@@ -155,7 +159,7 @@ extension PitchABooWebSocketServer {
     func handleMessageFromClient(
         data: Data,
         context: NWConnection.ContentContext,
-        connection: NWConnection
+        connection: Connection
     ) throws {
         if let message = try? JSONDecoder().decode(TransferMessage.self, from: data) {
             router.redirectMessage(message, from: connection)

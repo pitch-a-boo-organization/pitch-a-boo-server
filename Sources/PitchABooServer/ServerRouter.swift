@@ -8,20 +8,18 @@
 import Foundation
 import Network
 
-public class ServerRouter {
-    weak var server: PitchABooWebSocketServer?
-    public init(server: PitchABooWebSocketServer? = nil) { self.server = server }
+class ServerRouter {
+    weak var server: Server?
+    init(server: Server? = nil) { self.server = server }
     
-    func redirectMessage(
-        _ message: TransferMessage,
-        from connection: NWConnection
-    ) {
+    func redirectMessage(_ message: TransferMessage, from connection: Connection) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
         guard let server = server else { return }
         let session = server.gameSession
+        
         switch code {
             case .verifyAvailability:
-                let message = DefaultMessage.canConnectMessage(server.listener.state == .ready).load
+                let message = DefaultMessage.canConnectMessage(server.getServerState() == .ready).load
                 server.sendMessageToClient(
                     message: message,
                     client: connection,
