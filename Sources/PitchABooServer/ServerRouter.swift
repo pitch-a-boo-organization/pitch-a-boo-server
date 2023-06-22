@@ -53,7 +53,7 @@ class ServerRouter {
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
                 guard let gameStage = GameStages(rawValue: startProcessDTO.stage) else { return }
-                handleStartInStage(gameStage)
+                if startProcessDTO.start { handleStartInStage(gameStage) }
                 break
         }
     }

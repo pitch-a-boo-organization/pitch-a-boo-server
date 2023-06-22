@@ -7,10 +7,10 @@
 
 import Foundation
 
-class GameSession {
+public class GameSession {
     private var hasSelling: [Player] = []
-    private(set) var gameHasStarted = false
-    var players: [Player] = []
+    public private(set) var gameHasStarted = false
+    internal var players: [Player] = []
     
     func chooseSellingPlayer() -> Player? {
         for player in players {

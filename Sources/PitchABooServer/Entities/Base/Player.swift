@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Player: Codable {
+public struct Player: Codable {
     let id: Int
     let name: String
     let bones: Int
