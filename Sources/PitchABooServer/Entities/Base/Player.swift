@@ -15,3 +15,19 @@ struct Player: Codable {
     let persona: Persona
 }
 
+extension Player {
+    static let availableNames = [
+        "FullMoon",
+        "NailHead",
+        "GraveMan",
+        "ToiletGuy",
+        "Translucid",
+        "SharpTooth",
+        "Lilypad",
+        "FrostByte",
+        "StoneGrip",
+        "GhostWhisper",
+        "SparkSlash",
+        "BloodMoon"
+    ].shuffled()
+}

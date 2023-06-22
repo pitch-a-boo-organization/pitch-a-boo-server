@@ -14,50 +14,68 @@ struct Persona: Codable {
 }
 
 extension Persona {
-    static var availablePersonas: [Persona] = [
+    static let availablePersonas: [Persona] = [
         Persona(
             id: 1,
-            name: "LoboHomem",
+            name: "Werewolf",
             characteristics: [
-                "Com medo de água",
-                "Gosta de ficar na régua e joga altinha na praia de copacabana",
-                "Viciada em academia e toma whey"
+                "Extroverted",
+                "Collectionner",
+                "Athletic"
             ]
         ),
         Persona(
             id: 2,
-            name: "Vampiro",
+            name: "Vampire",
             characteristics: [
-                "Vegano",
-                "Possui lente no dente",
-                "Estilo gótico mas não fede"
+                "Gothic",
+                "Collectionner",
+                "Vegan"
             ]
         ),
         Persona(
             id: 3,
-            name: "Frankstein ",
+            name: "Frankenstein",
             characteristics: [
-                "Workaholic",
-                "Estilista que veste roupa que parecidas com o da lady gaga.",
-                "Sensivel e introspectiva"
+                "Playful",
+                "Introvert",
+                "Fashionable"
             ]
         ),
         Persona(
             id: 4,
-            name: "Zumbi ",
+            name: "Zombie",
             characteristics: [
-                "Usuário de vape e da green",
-                "Vaidoso, que vive checando seu penteado no espelho; cheiro de rato morto",
-                "Vive na roça e odeia cidades e tecnologias, anda de carioca e fala que nem mineiro."
+                "Dumb",
+                "Extroverted",
+                "Old-Fashioned"
             ]
         ),
         Persona(
             id: 5,
-            name: "Múmia ",
+            name: "Mummy",
             characteristics: [
-                "Rico futurista nostálgico",
-                "Com medo de fogo",
-                "Adora o carnaval brasileiro e gosta de sambar"
+                "Workaholic",
+                "Fashionable",
+                "Old-Fashioned"
+            ]
+        ),
+        Persona(
+            id: 6,
+            name: "Ghost",
+            characteristics: [
+                "Gothic",
+                "Playful",
+                "Introvert"
+            ]
+        ),
+        Persona(
+            id: 7,
+            name: "Lake Monster",
+            characteristics: [
+                "Extroverted",
+                "Playful",
+                "Athletic"
             ]
         )
     ].shuffled()

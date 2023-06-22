@@ -32,27 +32,24 @@ public class ServerRouter {
                     }
                 )
             case .connectToSession:
-                if session.players.count < 4 {
+                if session.players.count < 7 {
                     server.connectedClients.append(connection)
-                    if !Item.availableItems.isEmpty {
-                        guard let playerItem = Item.availableItems.first else { return }
-                        let player = Player(
-                            id: session.players.count + 1,
-                            name: "Player \(session.players.count + 1)",
-                            bones: 0,
-                            sellingItem: playerItem,
-                            persona: Persona.availablePersonas[session.players.count]
-                        )
-                        server.gameSession.players.append(player)
-                        server.sendMessageToClient(
-                            message: DefaultMessage.playerIdentifier(player).load,
-                            client: connection,
-                            completion: { _ in }
-                        )
-                        Item.availableItems.removeFirst()
-                    }
+                    let playerId = session.players.count
+                    let player = Player(
+                        id: playerId + 1,
+                        name: Player.availableNames[playerId],
+                        bones: 0,
+                        sellingItem: Item.availableItems[playerId],
+                        persona: Persona.availablePersonas[playerId]
+                    )
+                    server.gameSession.players.append(player)
+                    server.sendMessageToClient(
+                        message: DefaultMessage.playerIdentifier(player).load,
+                        client: connection,
+                        completion: { _ in }
+                    )
+                    server.sendMessageToAllClients(DefaultMessage.connectedPlayers(session.players).load)
                 }
-                server.sendMessageToAllClients(DefaultMessage.connectedPlayers(session.players).load)
             case .bid:
                 break
             case .startProcess:
