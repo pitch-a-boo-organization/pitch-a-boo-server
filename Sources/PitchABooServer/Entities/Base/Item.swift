@@ -14,7 +14,7 @@ struct Item: Codable {
 }
 
 extension Item {
-    static var availableItems: [Item] = [
+    static let availableItems: [Item] = [
         Item(id: 1, name: "Cérebro do albert einstein", value: 6),
         Item(id: 2, name: "Caneta", value: 3),
         Item(id: 3, name: "Braço que no lugar da mao tem uma motoserra", value: 4),

@@ -13,6 +13,8 @@ enum DefaultMessage {
     case startMessage(Int, Bool)
     case connectedPlayers([Player])
     case playerIdentifier(Player)
+    case choosePlayer(Int, Player, Item)
+    case saleResult([Player], Bool, SaleResult)
     
     var load: TransferMessage {
         switch self {
@@ -26,6 +28,10 @@ enum DefaultMessage {
             return connectedPlayersMessage(players: players)
         case .playerIdentifier(let player):
             return playerIdentifier(player: player)
+        case .choosePlayer(let stage, let player, let item):
+            return choosePlayer(stage: stage, player: player, item: item)
+        case .saleResult(let players, let gameEnded, let result):
+            return saleResult(players: players, gameEnded: gameEnded, result: result)
         }
     }
 }
@@ -91,6 +97,31 @@ extension DefaultMessage {
                 DTOPlayerIdentifier(
                     stage: 10,
                     player: player
+                )
+            )
+        )
+    }
+    
+    func choosePlayer(stage: Int, player: Player, item: Item) -> TransferMessage {
+        return TransferMessage(
+            code: CommandCode.ServerMessage.choosenPlayer.rawValue,
+            device: .coreOS,
+            message: try! JSONEncoder().encode(
+                DTOChosenPlayer(stage: stage, player: player, item: item)
+            )
+        )
+    }
+    
+    func saleResult(players: [Player], gameEnded: Bool, result: SaleResult) -> TransferMessage {
+        return TransferMessage(
+            code: CommandCode.ServerMessage.saleResult.rawValue,
+            device: .coreOS,
+            message: try! JSONEncoder().encode(
+                DTOSaleResult(
+                    stage: 34,
+                    players: players,
+                    gameEnded: gameEnded,
+                    result: result
                 )
             )
         )

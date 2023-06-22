@@ -12,8 +12,3 @@ struct DTOVerifyAvailability: Codable {
     let available: Bool
 }
 
-struct SaleResult: Codable {
-    let winner: Player
-    let price: Double
-}
-

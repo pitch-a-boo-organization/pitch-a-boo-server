@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Player: Codable {
+public struct Player: Codable {
     let id: Int
     let name: String
     let bones: Int
@@ -15,3 +15,19 @@ struct Player: Codable {
     let persona: Persona
 }
 
+extension Player {
+    static let availableNames = [
+        "FullMoon",
+        "NailHead",
+        "GraveMan",
+        "ToiletGuy",
+        "Translucid",
+        "SharpTooth",
+        "Lilypad",
+        "FrostByte",
+        "StoneGrip",
+        "GhostWhisper",
+        "SparkSlash",
+        "BloodMoon"
+    ].shuffled()
+}

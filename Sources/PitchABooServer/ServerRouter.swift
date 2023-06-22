@@ -8,19 +8,18 @@
 import Foundation
 import Network
 
-public class ServerRouter {
-    weak var server: PitchABooWebSocketServer?
-    public init(server: PitchABooWebSocketServer? = nil) { self.server = server }
+class ServerRouter {
+    weak var server: Server?
+    init(server: Server? = nil) { self.server = server }
     
-    func redirectMessage(
-        _ message: TransferMessage,
-        from connection: NWConnection
-    ) {
+    func redirectMessage(_ message: TransferMessage, from connection: Connection) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
         guard let server = server else { return }
+        let session = server.gameSession
+        
         switch code {
             case .verifyAvailability:
-                let message = DefaultMessage.canConnectMessage(server.listener.state == .ready).load
+                let message = DefaultMessage.canConnectMessage(server.getServerState() == .ready).load
                 server.sendMessageToClient(
                     message: message,
                     client: connection,
@@ -31,51 +30,72 @@ public class ServerRouter {
                     }
                 )
             case .connectToSession:
-                if server.players.count < 4 {
+                if session.players.count < 7 {
                     server.connectedClients.append(connection)
-                    if !Item.availableItems.isEmpty {
-                        guard let playerItem = Item.availableItems.first else { return }
-                        let player = Player(
-                            id: server.players.count + 1,
-                            name: "Player \(server.players.count + 1)",
-                            bones: 0,
-                            sellingItem: playerItem,
-                            persona: Persona.availablePersonas[server.players.count]
-                        )
-                        server.players.append(player)
-                        server.sendMessageToClient(
-                            message: DefaultMessage.playerIdentifier(player).load,
-                            client: connection,
-                            completion: { _ in }
-                        )
-                        Item.availableItems.removeFirst()
-                    }
+                    let playerId = session.players.count
+                    let player = Player(
+                        id: playerId + 1,
+                        name: Player.availableNames[playerId],
+                        bones: 0,
+                        sellingItem: Item.availableItems[playerId],
+                        persona: Persona.availablePersonas[playerId]
+                    )
+                    server.gameSession.players.append(player)
+                    server.sendMessageToClient(
+                        message: DefaultMessage.playerIdentifier(player).load,
+                        client: connection,
+                        completion: { _ in }
+                    )
+                    server.sendMessageToAllClients(DefaultMessage.connectedPlayers(session.players).load)
                 }
-                server.sendMessageToAllClients(DefaultMessage.connectedPlayers(server.players).load)
             case .bid:
+                guard let bidMessage = try? JSONDecoder().decode(DTOBid.self, from: message.message) else {
+                    print("Unrecognize Bid")
+                    return
+                }
+                session.receive(bid: bidMessage.bid, from: bidMessage.player, finishBids: {})
                 break
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
-                handleStage(GameStages(rawValue: startProcessDTO.stage)!)
+                guard let gameStage = GameStages(rawValue: startProcessDTO.stage) else { return }
+                if startProcessDTO.start { handleStartInStage(gameStage) }
                 break
         }
     }
     
-    func handleStage(_ stage: GameStages) {
+    func handleStartInStage(_ stage: GameStages) {
+        guard let server = server else { return }
         switch stage {
             case .first:
                 break
             case .second:
                 break
-            case .firstStageOfShift:
+            case .firstRoundStage:
+                server.gameSession.startGame()
+                guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
+                server.sendMessageToAllClients(
+                    DefaultMessage.choosePlayer(
+                        stage.rawValue,
+                        sellingPlayer,
+                        sellingPlayer.sellingItem
+                    ).load
+                )
                 break
-            case .secondStageOfShift:
+            case .secondRoundStage:
                 break
-            case .thirdStageOfShift:
+            case .thirdRoundStage:
                 break
-            case .fourthStageOfShift:
+            case .fourthRoundStage:
+                guard let saleResult = server.gameSession.finishInning() else { return }
+                server.sendMessageToAllClients(
+                    DefaultMessage.saleResult(
+                        server.gameSession.players,
+                        server.gameSession.gameEnded,
+                        saleResult
+                    ).load
+                )
                 break
-            case .fifthStageOfShift:
+            case .fiftyRoundStage:
                 break
         }
     }
