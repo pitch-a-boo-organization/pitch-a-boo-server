@@ -49,6 +49,11 @@ class ServerRouter {
                     server.sendMessageToAllClients(DefaultMessage.connectedPlayers(session.players).load)
                 }
             case .bid:
+                guard let bidMessage = try? JSONDecoder().decode(DTOBid.self, from: message.message) else {
+                    print("Unrecognize Bid")
+                    return
+                }
+                session.receive(bid: bidMessage.bid, from: bidMessage.player)
                 break
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
@@ -81,6 +86,14 @@ class ServerRouter {
             case .thirdRoundStage:
                 break
             case .fourthRoundStage:
+                guard let saleResult = server.gameSession.finishInning() else { return }
+                server.sendMessageToAllClients(
+                    DefaultMessage.saleResult(
+                        server.gameSession.players,
+                        server.gameSession.gameEnded,
+                        saleResult
+                    ).load
+                )
                 break
             case .fiftyRoundStage:
                 break

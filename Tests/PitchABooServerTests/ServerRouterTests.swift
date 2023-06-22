@@ -99,6 +99,25 @@ final class ServerRouterTests: XCTestCase {
         XCTAssertNotNil(server.sendedMessageToAllClients)
         XCTAssertEqual(server.sendMessageToAllClientsCalled, 1)
     }
+    
+    func test_redirectMessage_bid_session_should_receive_bid() throws {
+        let (sut, (server, connection)) = makeSUT()
+        let inputPlayer = Player(
+            id: 0,
+            name: Player.availableNames.first!,
+            bones: 0,
+            sellingItem: Item.availableItems.first!,
+            persona: Persona.availablePersonas.first!
+        )
+        server.gameSession.players.append(inputPlayer)
+        let inputBidMessage = TransferMessage(
+            code: CommandCode.ClientMessage.bid.rawValue,
+            device: .iOS,
+            message: try! JSONEncoder().encode(DTOBid(stage: 33, bid: 5, player: inputPlayer))
+        )
+        sut.redirectMessage(inputBidMessage, from: connection)
+        XCTAssertEqual(server.gameSession.inningBids.count, 1)
+    }
 }
 
 extension ServerRouterTests {
