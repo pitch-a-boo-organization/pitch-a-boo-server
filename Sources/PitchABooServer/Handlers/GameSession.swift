@@ -8,8 +8,8 @@
 import Foundation
 
 public class GameSession {
-    private var hasSelling: [Player] = []
-    private var currentSellingPlayer: Player?
+    private (set) var hasSelling: [Player] = []
+    private (set) var currentSellingPlayer: Player?
     internal var players: [Player] = []
     private(set) var inningBids: [(bid: Int, from: Player)] = []
     public private(set) var gameHasStarted = false
@@ -32,7 +32,9 @@ public class GameSession {
     
     func startGame() { gameHasStarted.toggle() }
     
-    func receive(bid: Int, from player: Player) { inningBids.append((bid, player)) }
+    func receive(bid: Int, from player: Player, finishBids: (() -> Void)?) {
+        inningBids.append((bid, player))
+    }
     
     func finishInning() -> SaleResult? {
         if !inningBids.isEmpty {

@@ -53,7 +53,7 @@ class ServerRouter {
                     print("Unrecognize Bid")
                     return
                 }
-                session.receive(bid: bidMessage.bid, from: bidMessage.player)
+                session.receive(bid: bidMessage.bid, from: bidMessage.player, finishBids: {})
                 break
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
