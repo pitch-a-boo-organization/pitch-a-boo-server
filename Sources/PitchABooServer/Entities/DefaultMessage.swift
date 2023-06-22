@@ -101,7 +101,7 @@ extension DefaultMessage {
     
     func choosePlayer(stage: Int, player: Player, item: Item) -> TransferMessage {
         return TransferMessage(
-            code: stage,
+            code: CommandCode.ServerMessage.choosenPlayer.rawValue,
             device: .coreOS,
             message: try! JSONEncoder().encode(
                 DTOChosenPlayer(stage: stage, player: player, item: item)
