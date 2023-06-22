@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "CD2334E9-58D2-4F0C-8ECB-D16A002B4D8E",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "PitchABooServerTests",
+        "name" : "PitchABooServerTests"
+      }
+    }
+  ],
+  "version" : 1
+}
