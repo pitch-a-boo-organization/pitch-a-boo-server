@@ -2,9 +2,9 @@ import Foundation
 import Network
 
 public final class PitchABooWebSocketServer: Server {
-    
+    public var gameSession: GameSession = GameSession()
+    public weak var output: ServerOutputs?
     var connectedClients: [Connection] = []
-    var gameSession: GameSession = GameSession()
     var listener: NWListener
     var timer: Timer?
     private var router: ServerRouter = ServerRouter()
@@ -29,6 +29,10 @@ public final class PitchABooWebSocketServer: Server {
             throw WebSocketError.unableToInitializeListener
         }
         router.server = self
+    }
+    
+    public func defineOutput(_ registeredOutput: ServerOutputs) {
+        self.output = registeredOutput
     }
     
     func getServerState() -> NWListener.State {

@@ -9,8 +9,8 @@ import Foundation
 import Network
 
 class ServerRouter {
-    weak var server: Server?
-    init(server: Server? = nil) { self.server = server }
+    weak var server: (any Server)?
+    init(server: (any Server)? = nil) { self.server = server }
     
     func redirectMessage(_ message: TransferMessage, from connection: Connection) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
@@ -41,6 +41,7 @@ class ServerRouter {
                         persona: Persona.availablePersonas[playerId]
                     )
                     server.gameSession.players.append(player)
+                    server.output?.didConectPlayer(players: server.gameSession.players)
                     server.sendMessageToClient(
                         message: DefaultMessage.playerIdentifier(player).load,
                         client: connection,
@@ -73,6 +74,7 @@ class ServerRouter {
             case .firstRoundStage:
                 server.gameSession.startGame()
                 guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
+                server.output?.didDefineSellingPlayer(sellingPlayer)
                 server.sendMessageToAllClients(
                     DefaultMessage.choosePlayer(
                         stage.rawValue,
@@ -87,10 +89,13 @@ class ServerRouter {
                 break
             case .fourthRoundStage:
                 guard let saleResult = server.gameSession.finishInning() else { return }
+                let players = server.gameSession.players
+                let gameEnded = server.gameSession.gameEnded
+                server.output?.inningEnd(players: players, gameEnded: gameEnded, result: saleResult)
                 server.sendMessageToAllClients(
                     DefaultMessage.saleResult(
-                        server.gameSession.players,
-                        server.gameSession.gameEnded,
+                        players,
+                        gameEnded,
                         saleResult
                     ).load
                 )

@@ -185,7 +185,7 @@ final class ServerRouterTests: XCTestCase {
 // MARK: - Func Factory
 extension ServerRouterTests {
     typealias Bid = (player: Player, bid: Int)
-    func startGameWithPlayers(_ game: Server, numOfPlayers: Int = 3) {
+    func startGameWithPlayers(_ game: any Server, numOfPlayers: Int = 3) {
         if numOfPlayers > 7 { return }
         for i in 0..<numOfPlayers {
             let inputPlayer = Player(

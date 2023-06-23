@@ -8,10 +8,10 @@
 import Foundation
 
 public class GameSession {
-    private (set) var hasSelling: [Player] = []
-    private (set) var currentSellingPlayer: Player?
-    internal var players: [Player] = []
-    private(set) var inningBids: [(bid: Int, from: Player)] = []
+    public private (set) var hasSelling: [Player] = []
+    public private (set) var currentSellingPlayer: Player?
+    public var players: [Player] = []
+    public private(set) var inningBids: [(bid: Int, from: Player)] = []
     public private(set) var gameHasStarted = false
     public var gameEnded: Bool {
         get {
