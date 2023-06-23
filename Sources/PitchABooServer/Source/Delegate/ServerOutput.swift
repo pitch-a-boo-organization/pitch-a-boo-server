@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol ServerOutputs: AnyObject {
+public protocol ServerOutputs: AnyObject {
     func didConectPlayer(players: [Player])
 }
