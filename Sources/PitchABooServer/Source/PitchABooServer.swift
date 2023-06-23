@@ -31,6 +31,10 @@ public final class PitchABooWebSocketServer: Server {
         router.server = self
     }
     
+    public func defineOutput(_ registeredOutput: ServerOutputs) {
+        self.output = registeredOutput
+    }
+    
     func getServerState() -> NWListener.State {
         return listener.state
     }
