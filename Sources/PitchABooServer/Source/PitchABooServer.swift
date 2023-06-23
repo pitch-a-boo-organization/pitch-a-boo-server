@@ -1,10 +1,9 @@
 import Foundation
 import Network
 
-public final class PitchABooWebSocketServer: Server {
-    
+public final class PitchABooWebSocketServer: ObservableObject, Server {
+    @Published var gameSession: GameSession = GameSession()
     var connectedClients: [Connection] = []
-    var gameSession: GameSession = GameSession()
     var listener: NWListener
     var timer: Timer?
     private var router: ServerRouter = ServerRouter()
