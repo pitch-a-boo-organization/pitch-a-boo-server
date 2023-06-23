@@ -74,6 +74,7 @@ class ServerRouter {
             case .firstRoundStage:
                 server.gameSession.startGame()
                 guard let sellingPlayer = server.gameSession.chooseSellingPlayer() else { return }
+                server.output?.didDefineSellingPlayer(sellingPlayer)
                 server.sendMessageToAllClients(
                     DefaultMessage.choosePlayer(
                         stage.rawValue,
@@ -88,10 +89,13 @@ class ServerRouter {
                 break
             case .fourthRoundStage:
                 guard let saleResult = server.gameSession.finishInning() else { return }
+                let players = server.gameSession.players
+                let gameEnded = server.gameSession.gameEnded
+                server.output?.inningEnd(players: players, gameEnded: gameEnded, result: saleResult)
                 server.sendMessageToAllClients(
                     DefaultMessage.saleResult(
-                        server.gameSession.players,
-                        server.gameSession.gameEnded,
+                        players,
+                        gameEnded,
                         saleResult
                     ).load
                 )
