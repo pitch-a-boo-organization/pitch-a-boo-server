@@ -10,6 +10,8 @@ import Network
 @testable import PitchABooServer
 
 class ServerMock: Server {
+    var output: PitchABooServer.ServerOutputs?
+    
     private(set) var sendMessageToClientCalled = 0
     private(set) var getServerHostnameCalled = 0
     private(set) var getServerStateCalled = 0

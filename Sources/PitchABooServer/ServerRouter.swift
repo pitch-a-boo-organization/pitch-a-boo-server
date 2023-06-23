@@ -41,6 +41,7 @@ class ServerRouter {
                         persona: Persona.availablePersonas[playerId]
                     )
                     server.gameSession.players.append(player)
+                    server.output?.didConectPlayer(players: server.gameSession.players)
                     server.sendMessageToClient(
                         message: DefaultMessage.playerIdentifier(player).load,
                         client: connection,
