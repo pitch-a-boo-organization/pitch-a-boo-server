@@ -8,7 +8,7 @@
 import Foundation
 import Network
 
-protocol Server: AnyObject {
+protocol Server: ObservableObject, AnyObject {
     var connectedClients: [Connection] { get set }
     var gameSession: GameSession { get set }
     
