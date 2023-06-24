@@ -55,6 +55,7 @@ public class ServerRouter {
                     return
                 }
                 session.receive(bid: bidMessage.bid, from: bidMessage.player, finishBids: {})
+                server.output?.didReceiveBid(bid: bidMessage.bid, from: bidMessage.player)
                 break
             case .startProcess:
                 let startProcessDTO = try! JSONDecoder().decode(DTOStartProcess.self, from: message.message)
