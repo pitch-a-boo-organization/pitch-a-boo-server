@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TransferMessage: Codable {
+public struct TransferMessage: Codable {
     let code: Int
     let device: Device
     let message: Data
