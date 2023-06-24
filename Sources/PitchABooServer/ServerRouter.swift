@@ -8,7 +8,7 @@
 import Foundation
 import Network
 
-class ServerRouter {
+public class ServerRouter {
     weak var server: (any Server)?
     init(server: (any Server)? = nil) { self.server = server }
     

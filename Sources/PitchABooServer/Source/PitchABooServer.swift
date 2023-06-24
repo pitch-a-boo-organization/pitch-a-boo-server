@@ -3,11 +3,11 @@ import Network
 
 public final class PitchABooWebSocketServer: Server {
     public var gameSession: GameSession = GameSession()
+    public var router: ServerRouter = ServerRouter()
     public weak var output: ServerOutputs?
     var connectedClients: [Connection] = []
     var listener: NWListener
     var timer: Timer?
-    private var router: ServerRouter = ServerRouter()
     
     public init(port: UInt16) throws {
         let parameters = NWParameters(tls: nil)
