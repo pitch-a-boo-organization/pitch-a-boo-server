@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Item: Codable {
-    let id: Int
-    let name: String
-    let value: Int
+public struct Item: Codable {
+    public let id: Int
+    public let name: String
+    public let value: Int
 }
 
 extension Item {
