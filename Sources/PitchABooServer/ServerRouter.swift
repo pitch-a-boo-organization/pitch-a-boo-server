@@ -8,11 +8,11 @@
 import Foundation
 import Network
 
-class ServerRouter {
+public class ServerRouter {
     weak var server: (any Server)?
     init(server: (any Server)? = nil) { self.server = server }
     
-    func redirectMessage(_ message: TransferMessage, from connection: Connection) {
+    public func redirectMessage(_ message: TransferMessage, from connection: Connection) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
         guard let server = server else { return }
         let session = server.gameSession

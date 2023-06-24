@@ -8,11 +8,11 @@
 import Foundation
 
 public struct Player: Codable {
-    let id: Int
-    let name: String
-    let bones: Int
-    let sellingItem: Item
-    let persona: Persona
+    public let id: Int
+    public let name: String
+    public let bones: Int
+    public let sellingItem: Item
+    public let persona: Persona
 }
 
 extension Player {

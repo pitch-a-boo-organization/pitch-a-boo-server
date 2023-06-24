@@ -7,17 +7,23 @@
 
 import Foundation
 
-struct TransferMessage: Codable {
+public struct TransferMessage: Codable {
     let code: Int
     let device: Device
     let message: Data
+    
+    public init(code: Int, device: Device, message: Data) {
+        self.code = code
+        self.device = device
+        self.message = message
+    }
     
     func encodeToTransfer() throws -> Data {
         return try JSONEncoder().encode(self)
     }
 }
 
-enum Device: Int, Codable {
+public enum Device: Int, Codable {
     case iOS = 1
     case tvOS = 2
     case coreOS = 3

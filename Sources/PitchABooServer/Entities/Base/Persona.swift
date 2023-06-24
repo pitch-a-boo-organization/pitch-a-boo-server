@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct Persona: Codable {
-    let id: Int
-    let name: String
-    let characteristics: [String]
+public struct Persona: Codable {
+    public let id: Int
+    public let name: String
+    public let characteristics: [String]
 }
 
 extension Persona {

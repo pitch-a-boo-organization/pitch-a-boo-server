@@ -8,7 +8,7 @@
 import Foundation
 import Network
 
-protocol Connection {
+public protocol Connection {
     func send(
         content: Data?,
         contentContext: NWConnection.ContentContext,
