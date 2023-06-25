@@ -83,6 +83,12 @@ public class ServerRouter {
                         sellingPlayer.sellingItem
                     ).load
                 )
+                server.sendMessageToAllClients(
+                    DefaultMessage.startMessage(
+                        31,
+                        true
+                    ).load
+                )
                 break
             case .secondRoundStage:
                 break
