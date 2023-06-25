@@ -53,7 +53,7 @@ extension Persona {
         ),
         Persona(
             id: 5,
-            name: "Mummy",
+            name: "Invisible Man",
             characteristics: [
                 "Workaholic",
                 "Fashionable",

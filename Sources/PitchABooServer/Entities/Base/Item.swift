@@ -15,11 +15,11 @@ public struct Item: Codable {
 
 extension Item {
     static let availableItems: [Item] = [
-        Item(id: 1, name: "Cérebro do albert einstein", value: 6),
-        Item(id: 2, name: "Caneta", value: 3),
-        Item(id: 3, name: "Braço que no lugar da mao tem uma motoserra", value: 4),
-        Item(id: 4, name: "Abobora falante", value: 3),
-        Item(id: 5, name: "Meias listradas com padrões de abóboras e morcegos.", value: 5),
-        Item(id: 6, name: "Chapéu de bruxa com uma hélice no topo.", value: 6),
+        Item(id: 1, name: "Mad Scientist Brain", value: 6),
+        Item(id: 2, name: "Pen", value: 3),
+        Item(id: 3, name: "Chainsaw Hand", value: 4),
+        Item(id: 4, name: "Pumpkin", value: 3),
+        Item(id: 5, name: "Comfy Socks", value: 5),
+        Item(id: 6, name: "Witch Hat", value: 6),
     ].shuffled()
 }
