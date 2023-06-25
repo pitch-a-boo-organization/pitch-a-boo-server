@@ -87,13 +87,21 @@ public class ServerRouter {
             case .secondRoundStage:
                 break
             case .thirdRoundStage:
-            server.sendMessageToAllClients(
-                DefaultMessage.startMessage(
-                    33,
-                    true
-                ).load
-            )
+                server.sendMessageToAllClients(
+                    DefaultMessage.startMessage(
+                        33,
+                        true
+                    ).load
+                )
             case .fourthRoundStage:
+                server.sendMessageToAllClients(
+                    DefaultMessage.startMessage(
+                        34,
+                        true
+                    ).load
+                )
+                break
+            case .fiftyRoundStage:
                 guard let saleResult = server.gameSession.finishInning() else { return }
                 let players = server.gameSession.players
                 let gameEnded = server.gameSession.gameEnded
@@ -105,8 +113,6 @@ public class ServerRouter {
                         saleResult
                     ).load
                 )
-                break
-            case .fiftyRoundStage:
                 break
         }
     }

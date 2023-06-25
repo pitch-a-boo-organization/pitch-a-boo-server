@@ -237,7 +237,7 @@ extension ServerRouterTests {
             code: CommandCode.ClientMessage.startProcess.rawValue,
             device: .tvOS,
             message: try! JSONEncoder().encode(
-                DTOStartProcess(stage: 34, start: true)
+                DTOStartProcess(stage: 35, start: true)
             )
         )
         sut.redirectMessage(finishInningMessage, from: connection)
