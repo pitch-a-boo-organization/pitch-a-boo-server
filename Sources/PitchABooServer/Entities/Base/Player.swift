@@ -10,7 +10,7 @@ import Foundation
 public struct Player: Codable {
     public let id: Int
     public let name: String
-    public let bones: Int
+    public var bones: Int
     public let sellingItem: Item
     public let persona: Persona
 }
