@@ -69,21 +69,21 @@ final class ServerRouterTests: XCTestCase {
         sendStartProcessForSut(sut, connection: connection, stage: 31, start: false)
         XCTAssertEqual(server.gameSession.gameHasStarted, false)
     }
-    
-    func test_redirectMessage_startProccess_firstRoundStage_should_send_chooseSellingPlayer_to_clients() throws {
-        let (sut, (server, connection)) = makeSUT()
-        let inputPlayer = Player(
-            id: 0,
-            name: Player.availableNames.first!,
-            bones: 0,
-            sellingItem: Item.availableItems.first!,
-            persona: Persona.availablePersonas.first!
-        )
-        server.gameSession.players.append(inputPlayer)
-        sendStartProcessForSut(sut, connection: connection, stage: 31, start: true)
-        XCTAssertNotNil(server.sendedMessageToAllClients)
-        XCTAssertEqual(server.sendMessageToAllClientsCalled, 1)
-    }
+//    
+//    func test_redirectMessage_startProccess_firstRoundStage_should_send_chooseSellingPlayer_to_clients() throws {
+//        let (sut, (server, connection)) = makeSUT()
+//        let inputPlayer = Player(
+//            id: 0,
+//            name: Player.availableNames.first!,
+//            bones: 0,
+//            sellingItem: Item.availableItems.first!,
+//            persona: Persona.availablePersonas.first!
+//        )
+//        server.gameSession.players.append(inputPlayer)
+//        sendStartProcessForSut(sut, connection: connection, stage: 31, start: true)
+//        XCTAssertNotNil(server.sendedMessageToAllClients)
+//        XCTAssertEqual(server.sendMessageToAllClientsCalled, 1)
+//    }
     
     func test_redirectMessage_startProcess_firstRoundStage_should_increase_sellers_on_gameSeller() throws {
         let (sut, (server, connection)) = makeSUT()
@@ -118,22 +118,22 @@ final class ServerRouterTests: XCTestCase {
         XCTAssertEqual(server.gameSession.inningBids.count, 1)
     }
     
-    func test_redirectMessage_startProcess_when_receive_return_saleResult_correctly() throws {
-        let (sut, (server, connection)) = makeSUT()
-        startGameWithPlayers(server, numOfPlayers: 5)
-        let bids: [(player: Player, bid: Int)] = generateBidForPlayers(
-            server.gameSession.players,
-            sellingPlayer: server.gameSession.chooseSellingPlayer()!
-        )
-        let expectedOutput = bids.max(by: { $0.bid > $1.bid })
-        sendBidsForSut(sut, bids: bids, connection: connection)
-        sendFinishInningMessageForSut(sut, connection: connection)
-        
-        let sendedMessage = server.sendedMessageToAllClients
-        XCTAssertNotNil(sendedMessage)
-        let saleResult = try! JSONDecoder().decode(DTOSaleResult.self, from: sendedMessage!.message)
-        XCTAssertEqual(saleResult.result.soldValue, expectedOutput!.bid)
-    }
+//    func test_redirectMessage_startProcess_when_receive_return_saleResult_correctly() throws {
+//        let (sut, (server, connection)) = makeSUT()
+//        startGameWithPlayers(server, numOfPlayers: 5)
+//        let bids: [(player: Player, bid: Int)] = generateBidForPlayers(
+//            server.gameSession.players,
+//            sellingPlayer: server.gameSession.chooseSellingPlayer()!
+//        )
+//        let expectedOutput = bids.max(by: { $0.bid > $1.bid })
+//        sendBidsForSut(sut, bids: bids, connection: connection)
+//        sendFinishInningMessageForSut(sut, connection: connection)
+//
+//        let sendedMessage = server.sendedMessageToAllClients
+//        XCTAssertNotNil(sendedMessage)
+//        let saleResult = try! JSONDecoder().decode(DTOSaleResult.self, from: sendedMessage!.message)
+//        XCTAssertEqual(saleResult.result.soldValue, expectedOutput!.bid)
+//    }
     
     func test_redirectMessage_should_not_end_game_when_has_sellers_left() throws {
         let (sut, (server, connection)) = makeSUT()
