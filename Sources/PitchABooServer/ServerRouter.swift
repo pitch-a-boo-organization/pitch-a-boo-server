@@ -113,6 +113,12 @@ public class ServerRouter {
                         saleResult
                     ).load
                 )
+                server.sendMessageToAllClients(
+                    DefaultMessage.startMessage(
+                        35,
+                        true
+                    ).load
+                )
                 break
         }
     }

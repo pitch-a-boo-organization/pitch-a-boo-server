@@ -163,8 +163,9 @@ final class ServerRouterTests: XCTestCase {
         let (sut, (server, connection)) = makeSUT()
         startGameWithPlayers(server, numOfPlayers: 5)
 
-        for _ in 0..<server.gameSession.players.count {
+        for i in 0..<server.gameSession.players.count {
             sendStartProcessForSut(sut, connection: connection, stage: 31, start: true)
+            XCTAssertEqual(server.gameSession.hasSelling.count, i + 1)
             sendStartProcessForSut(sut, connection: connection, stage: 32, start: true)
             sendStartProcessForSut(sut, connection: connection, stage: 33, start: true)
             
