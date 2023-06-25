@@ -175,6 +175,7 @@ final class ServerRouterTests: XCTestCase {
             
             sendBidsForSut(sut, bids: bids, connection: connection)
             sendStartProcessForSut(sut, connection: connection, stage: 34, start: true)
+            sendStartProcessForSut(sut, connection: connection, stage: 35, start: true)
         }
         
         XCTAssertTrue(server.gameSession.gameEnded)
