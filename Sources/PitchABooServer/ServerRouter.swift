@@ -36,7 +36,7 @@ public class ServerRouter {
                     let player = Player(
                         id: playerId + 1,
                         name: Player.availableNames[playerId],
-                        bones: 0,
+                        bones: 10,
                         sellingItem: Item.availableItems[playerId],
                         persona: Persona.availablePersonas[playerId]
                     )
