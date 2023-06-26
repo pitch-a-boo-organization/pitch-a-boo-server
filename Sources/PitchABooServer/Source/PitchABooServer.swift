@@ -92,7 +92,8 @@ extension PitchABooWebSocketServer {
         let serverQueue = DispatchQueue(label: "ServerQueue")
         
         listener.newConnectionHandler = { newConnection in
-            if !self.connectedClients.contains(where: { $0.id == newConnection.id }) {
+            let currentConnection = self.connectedClients.first(where: { $0.id == newConnection.id })
+            if  currentConnection == nil {
                 let connection = newConnection as (any Connection)
                 self.didReceiveAConnection(connection, completion: completion)
                 
@@ -112,8 +113,9 @@ extension PitchABooWebSocketServer {
                         break
                     }
                 }
-                
                 connection.start(queue: serverQueue)
+            } else {
+                currentConnection!.start(queue: serverQueue)
             }
         }
         
