@@ -63,9 +63,12 @@ public class ServerRouter {
                 if startProcessDTO.start { handleStartInStage(gameStage) }
                 break
             case .pauseSession:
-                break
-//                let pauseMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
-//            session.players
+                let pauseMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
+                if pauseMessage.pause {
+                    server.sendMessageToAllClients(
+                        TransferMessage(code: 10, device: .coreOS, message: message.message)
+                    )
+                }
         }
     }
     
