@@ -113,6 +113,10 @@ extension PitchABooWebSocketServer {
         print("Server Started")
         //Debug: startTimer()
     }
+    
+    public func stopServer() {
+        listener.cancel()
+    }
 }
 
 // MARK: - Client Connection Handler
