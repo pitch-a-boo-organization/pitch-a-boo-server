@@ -16,6 +16,12 @@ public struct Player: Codable {
 }
 
 extension Player {
+    static func createAnUndefinedPlayer() -> Player {
+        Player(id: 0, name: "Undefined", bones: 0, sellingItem: Item(id: 0, name: "None", value: 0, characteristc: .athletic), persona: Persona(id: 0, name: "None", characteristics: [.dumb]))
+    }
+}
+
+extension Player {
     static let availableNames = [
         "FullMoon",
         "NailHead",
