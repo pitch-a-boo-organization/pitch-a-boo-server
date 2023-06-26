@@ -24,7 +24,7 @@ public struct Item: Codable, Hashable {
 }
 
 extension Item {
-    static let availableItems: [Item] = [
+    public static let availableItems: [Item] = [
         Item(id: 1, name: "Mad Scientist Brain", value: 6, characteristic: .collectionner),
         Item(id: 2, name: "Pen", value: 3, characteristic: .collectionner),
         Item(id: 3, name: "Chainsaw Hand", value: 4, characteristic: .extroverted),

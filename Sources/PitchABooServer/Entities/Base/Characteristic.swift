@@ -20,7 +20,7 @@ public enum Characteristic: String, Codable {
     case oldFashioned = "Old-Fashioned"
     case workaholic = "Workaholic"
     
-    var stringValue: String {
+    public var stringValue: String {
         return self.rawValue
     }
 }

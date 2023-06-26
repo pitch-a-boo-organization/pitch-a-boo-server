@@ -8,11 +8,11 @@
 import Foundation
 
 public struct Player: Codable, Hashable, Equatable {
-    let id: Int
-    let name: String
-    let bones: Int
-    let sellingItem: Item
-    let persona: Persona
+    public let id: Int
+    public let name: String
+    public let bones: Int
+    public let sellingItem: Item
+    public let persona: Persona
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -30,13 +30,13 @@ public struct Player: Codable, Hashable, Equatable {
 }
 
 extension Player {
-    static func createAnUndefinedPlayer() -> Player {
+    public static func createAnUndefinedPlayer() -> Player {
         Player(id: 0, name: "Undefined", bones: 0, sellingItem: Item(id: 0, name: "None", value: 0, characteristic: .athletic), persona: Persona(id: 0, name: "None", characteristics: [.dumb]))
     }
 }
 
 extension Player {
-    static let availableNames = [
+    public static let availableNames = [
         "FullMoon",
         "NailHead",
         "GraveMan",

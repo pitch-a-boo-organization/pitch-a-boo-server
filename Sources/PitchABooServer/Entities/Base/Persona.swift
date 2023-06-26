@@ -14,7 +14,7 @@ public struct Persona: Codable {
 }
 
 extension Persona {
-    static let availablePersonas: [Persona] = [
+    public static let availablePersonas: [Persona] = [
         Persona(
             id: 1,
             name: "Werewolf",
