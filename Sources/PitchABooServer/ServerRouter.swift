@@ -64,7 +64,6 @@ public class ServerRouter {
                 break
             case .pauseSession:
                 let pauseMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
-//                guard let playerIndex = session.players.firstIndex(where: { $0.id == pauseMessage.player.id}) else { return }
                 session.pausedPlayers.append(pauseMessage.player)
             case .resumeSession:
                 let resumeMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
