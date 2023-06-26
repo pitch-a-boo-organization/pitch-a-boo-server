@@ -16,6 +16,7 @@ enum CommandCode: Codable {
         case connectToSession = 2
         case bid = 5
         case startProcess = 4
+        case pauseSession = 10
     }
     
     enum ServerMessage: Int, Codable {

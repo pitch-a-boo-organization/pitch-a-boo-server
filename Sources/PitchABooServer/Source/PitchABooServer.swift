@@ -5,7 +5,7 @@ public final class PitchABooWebSocketServer: Server {
     public var gameSession: GameSession = GameSession()
     public var router: ServerRouter = ServerRouter()
     public weak var output: ServerOutputs?
-    var connectedClients: [Connection] = []
+    var connectedClients: [any Connection] = []
     var listener: NWListener
     var timer: Timer?
     
@@ -46,7 +46,7 @@ public final class PitchABooWebSocketServer: Server {
     
     internal func sendMessageToClient(
         message: TransferMessage,
-        client: Connection,
+        client: any Connection,
         completion: @escaping (WebSocketError?) -> Void
     ) {
         let metadata = NWProtocolWebSocket.Metadata(opcode: .binary)
@@ -89,13 +89,32 @@ public final class PitchABooWebSocketServer: Server {
 // MARK: - Server Connection Handler
 extension PitchABooWebSocketServer {
     public func startServer(completion: @escaping (WebSocketError?) -> Void ) {
-        print("Starting Server...")
         let serverQueue = DispatchQueue(label: "ServerQueue")
         
         listener.newConnectionHandler = { newConnection in
-            self.didReceiveAConnection(newConnection, completion: completion)
-            self.didUpdateConnectionState(newConnection, completion: completion)
-            newConnection.start(queue: serverQueue)
+            if !self.connectedClients.contains(where: { $0.id == newConnection.id }) {
+                let connection = newConnection as (any Connection)
+                self.didReceiveAConnection(connection, completion: completion)
+                
+                connection.stateUpdateHandler = { state in
+                    switch state {
+                    case .ready:
+                        self.sendMessageToClient(
+                            message: DefaultMessage.canConnectMessage(!self.gameSession.gameHasStarted).load,
+                            client: connection,
+                            completion: completion
+                        )
+                    case .failed(_):
+                        completion(.cantConnectWithClient)
+                    case .waiting(_):
+                        completion(.connectTimeWasTooLong)
+                    default:
+                        break
+                    }
+                }
+                
+                connection.start(queue: serverQueue)
+            }
         }
         
         listener.stateUpdateHandler = { state in
@@ -111,7 +130,6 @@ extension PitchABooWebSocketServer {
             
         listener.start(queue: serverQueue)
         print("Server Started")
-        //Debug: startTimer()
     }
     
     public func stopServer() {
@@ -122,7 +140,7 @@ extension PitchABooWebSocketServer {
 // MARK: - Client Connection Handler
 extension PitchABooWebSocketServer {
     private func didReceiveAConnection(
-        _ connection: NWConnection,
+        _ connection: any Connection,
         completion: @escaping (WebSocketError?) -> Void
     ) {
         connection.receiveMessage { [weak self] (data, context, isComplete, error) in
@@ -141,33 +159,33 @@ extension PitchABooWebSocketServer {
         }
     }
 
-    private func didUpdateConnectionState(
-        _ connection: NWConnection,
-        completion: @escaping (WebSocketError?) -> Void
-    ) {
-        print("UPDATING CONNECTION STATE")
-        connection.stateUpdateHandler = { state in
-            switch state {
-                case .ready:
-                    self.sendMessageToClient(
-                        message: DefaultMessage.canConnectMessage(!self.gameSession.gameHasStarted).load,
-                        client: connection,
-                        completion: completion
-                    )
-                case .failed(_):
-                    completion(.cantConnectWithClient)
-                case .waiting(_):
-                    completion(.connectTimeWasTooLong)
-                default:
-                    break
-            }
-        }
-    }
+//    private func didUpdateConnectionState(
+//        _ connection: Connection,
+//        completion: @escaping (WebSocketError?) -> Void
+//    ) {
+//        print("UPDATING CONNECTION STATE")
+//        connection.stateUpdateHandler = { state in
+//            switch state {
+//                case .ready:
+//                    self.sendMessageToClient(
+//                        message: DefaultMessage.canConnectMessage(!self.gameSession.gameHasStarted).load,
+//                        client: connection,
+//                        completion: completion
+//                    )
+//                case .failed(_):
+//                    completion(.cantConnectWithClient)
+//                case .waiting(_):
+//                    completion(.connectTimeWasTooLong)
+//                default:
+//                    break
+//            }
+//        }
+//    }
     
     func handleMessageFromClient(
         data: Data,
         context: NWConnection.ContentContext,
-        connection: Connection
+        connection: any Connection
     ) throws {
         if let message = try? JSONDecoder().decode(TransferMessage.self, from: data) {
             router.redirectMessage(message, from: connection)
