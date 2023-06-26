@@ -20,12 +20,12 @@ class ServerMock: Server {
     private(set) var handleMessageFromClientCalled = 0
     private(set) var sendedMessageToAllClients: TransferMessage?
     
-    var connectedClients: [Connection] = []
+    var connectedClients: [any Connection] = []
     var gameSession: GameSession = GameSession()
     
     func sendMessageToClient(
         message: PitchABooServer.TransferMessage,
-        client: PitchABooServer.Connection,
+        client: any PitchABooServer.Connection,
         completion: @escaping (PitchABooServer.WebSocketError?) -> Void) {
             sendMessageToClientCalled += 1
     }
@@ -49,7 +49,7 @@ class ServerMock: Server {
         startServerCalled += 1
     }
     
-    func handleMessageFromClient(data: Data, context: NWConnection.ContentContext, connection: PitchABooServer.Connection) throws {
+    func handleMessageFromClient(data: Data, context: NWConnection.ContentContext, connection: any PitchABooServer.Connection) throws {
         handleMessageFromClientCalled += 1
     }
 }

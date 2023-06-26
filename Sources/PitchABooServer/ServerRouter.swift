@@ -12,7 +12,7 @@ public class ServerRouter {
     weak var server: (any Server)?
     init(server: (any Server)? = nil) { self.server = server }
     
-    public func redirectMessage(_ message: TransferMessage, from connection: Connection) {
+    public func redirectMessage(_ message: TransferMessage, from connection: any Connection) {
         guard let code = CommandCode.ClientMessage(rawValue: message.code) else { return }
         guard let server = server else { return }
         let session = server.gameSession
@@ -62,6 +62,16 @@ public class ServerRouter {
                 guard let gameStage = GameStages(rawValue: startProcessDTO.stage) else { return }
                 if startProcessDTO.start { handleStartInStage(gameStage) }
                 break
+            case .pauseSession:
+                let pauseMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
+                session.pausedPlayers.append(pauseMessage.player)
+            case .resumeSession:
+                let resumeMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
+                if let playerIndex = session.pausedPlayers.firstIndex(where: { $0.id == resumeMessage.player.id}) {
+                    server.connectedClients.append(connection)
+                    session.pausedPlayers.remove(at: playerIndex)
+                }
+                
         }
     }
     
