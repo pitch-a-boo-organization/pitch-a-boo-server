@@ -9,5 +9,5 @@ import Foundation
 
 struct DTOPauseSession: Codable {
     let stage: Int
-    let pause: Bool
+    let player: Player
 }

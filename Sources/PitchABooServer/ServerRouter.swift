@@ -64,11 +64,13 @@ public class ServerRouter {
                 break
             case .pauseSession:
                 let pauseMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
-                if pauseMessage.pause {
-                    server.sendMessageToAllClients(
-                        TransferMessage(code: 10, device: .coreOS, message: message.message)
-                    )
-                }
+                session.pausedPlayers.append(pauseMessage.player)
+                case .resumeSession:
+                    let resumeMessage = try! JSONDecoder().decode(DTOPauseSession.self, from: message.message)
+                if session.pausedPlayers.contains(where: { $0.id == resumeMessage.player.id}) {
+                        server.connectedClients.append(connection)
+                    }
+                
         }
     }
     
