@@ -18,6 +18,7 @@ public class GameSession {
             return hasSelling.count == players.count
         }
     }
+    internal var pausedPlayers: [Player] = []
     
     func chooseSellingPlayer() -> Player? {
         for player in players {

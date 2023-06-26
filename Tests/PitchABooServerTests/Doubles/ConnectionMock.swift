@@ -10,6 +10,16 @@ import Network
 @testable import PitchABooServer
 
 class SpyConnection: Connection {
+    var stateUpdateHandler: ((NWConnection.State) -> Void)?
+    
+    func receiveMessage(completion: @escaping (Data?, NWConnection.ContentContext?, Bool, NWError?) -> Void) {
+        
+    }
+    
+    func start(queue: DispatchQueue) {
+        
+    }
+    
     private(set) var sendCalledCount = 0
     
     func send(

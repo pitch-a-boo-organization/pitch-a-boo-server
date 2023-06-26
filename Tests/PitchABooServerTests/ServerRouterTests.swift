@@ -201,7 +201,7 @@ extension ServerRouterTests {
         }
     }
     
-    func sendStartProcessForSut(_ sut: ServerRouter, connection: Connection, stage: Int, start: Bool) {
+    func sendStartProcessForSut(_ sut: ServerRouter, connection: any Connection, stage: Int, start: Bool) {
         let inputMessage = TransferMessage(
             code: CommandCode.ClientMessage.startProcess.rawValue,
             device: .iOS,
@@ -221,7 +221,7 @@ extension ServerRouterTests {
         return bids
     }
     
-    func sendBidsForSut(_ sut: ServerRouter, bids: [Bid], connection: Connection) {
+    func sendBidsForSut(_ sut: ServerRouter, bids: [Bid], connection: any Connection) {
         for bid in bids {
             let inputBidMessage = TransferMessage(
                 code: CommandCode.ClientMessage.bid.rawValue,
@@ -234,7 +234,7 @@ extension ServerRouterTests {
         }
     }
     
-    func sendFinishInningMessageForSut(_ sut: ServerRouter, connection: Connection) {
+    func sendFinishInningMessageForSut(_ sut: ServerRouter, connection: any Connection) {
         let finishInningMessage = TransferMessage(
             code: CommandCode.ClientMessage.startProcess.rawValue,
             device: .tvOS,
