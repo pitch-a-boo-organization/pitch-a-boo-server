@@ -72,14 +72,20 @@ public class ServerRouter {
                     server.connectedClients.append(connection)
                     session.pausedPlayers.remove(at: playerIndex)
                 }
-            case .updatePlayer:
-                let _ = try! JSONDecoder().decode(DTOPlayerIdentifier.self, from: message.message)
-                guard let player = server.gameSession.players.first(where: { $0 == connection.associatedPlayer} ) else { return }
-                server.sendMessageToClient(
-                    message: DefaultMessage.playerIdentifier(player).load,
-                    client: connection,
-                    completion: { _ in }
+            case .updatePlayers:
+                let playersMessage = try! JSONDecoder().decode(
+                    DTOUpdatePlayers.self,
+                    from: message.message
                 )
+                server.gameSession.players = playersMessage.players
+                server.connectedClients.forEach { connection in
+                    guard let findedPlayer = server.gameSession.players.first(where: { $0.id == connection.associatedPlayer.id }) else { return }
+                    connection.associatedPlayer = findedPlayer
+                    server.sendMessageToClient(
+                        message: DefaultMessage.playerIdentifier(findedPlayer).load,
+                        client: connection,
+                        completion: { _ in })
+                }
         }
     }
     
