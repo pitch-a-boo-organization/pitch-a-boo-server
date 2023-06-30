@@ -2,7 +2,7 @@ import Foundation
 import Network
 
 public final class PitchABooWebSocketServer: Server {
-    public var gameSession: GameSession = GameSession()
+    public var gameSession: GameSession
     public var router: ServerRouter = ServerRouter()
     public weak var output: ServerOutputs?
     var connectedClients: [any Connection] = []
@@ -10,6 +10,7 @@ public final class PitchABooWebSocketServer: Server {
     var timer: Timer?
     
     public init(port: UInt16) throws {
+        gameSession = GameSession(players: connectedClients.map { $0.associatedPlayer } )
         let parameters = NWParameters(tls: nil)
         parameters.allowLocalEndpointReuse = true
         parameters.includePeerToPeer = true

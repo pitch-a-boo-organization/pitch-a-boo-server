@@ -8,9 +8,9 @@
 import Foundation
 
 public class GameSession {
+    public var players: [Player]
     public private (set) var hasSelling: [Player] = []
     public private (set) var currentSellingPlayer: Player?
-    public var players: [Player] = []
     public private(set) var inningBids: [(bid: Int, from: Player)] = []
     public private(set) var gameHasStarted = false
     public var gameEnded: Bool {
@@ -19,6 +19,8 @@ public class GameSession {
         }
     }
     internal var pausedPlayers: [Player] = []
+    
+    init(players: [Player]) { self.players = players }
     
     func chooseSellingPlayer() -> Player? {
         for player in players {
