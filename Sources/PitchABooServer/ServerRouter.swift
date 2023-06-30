@@ -78,13 +78,16 @@ public class ServerRouter {
                     from: message.message
                 )
                 server.gameSession.players = playersMessage.players
-                server.connectedClients.forEach { connection in
-                    guard let findedPlayer = server.gameSession.players.first(where: { $0.id == connection.associatedPlayer.id }) else { return }
-                    connection.associatedPlayer = findedPlayer
+                for (index, connection) in server.connectedClients.enumerated() {
+                    guard let findedPlayer = server.gameSession.players.first(
+                        where: { $0.id == connection.associatedPlayer.id }
+                    ) else { return }
+                    server.connectedClients[index].associatedPlayer = findedPlayer
                     server.sendMessageToClient(
                         message: DefaultMessage.playerIdentifier(findedPlayer).load,
                         client: connection,
-                        completion: { _ in })
+                        completion: { _ in }
+                    )
                 }
         }
     }
