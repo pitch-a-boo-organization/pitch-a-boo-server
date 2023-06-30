@@ -8,7 +8,8 @@
 import Foundation
 
 public class GameSession {
-    public var players: [Player]
+    public var players: [Player] = []
+    internal var pausedPlayers: [Player] = []
     public private (set) var hasSelling: [Player] = []
     public private (set) var currentSellingPlayer: Player?
     public private(set) var inningBids: [(bid: Int, from: Player)] = []
@@ -18,9 +19,6 @@ public class GameSession {
             return hasSelling.count == players.count
         }
     }
-    internal var pausedPlayers: [Player] = []
-    
-    init(players: [Player]) { self.players = players }
     
     func chooseSellingPlayer() -> Player? {
         for player in players {

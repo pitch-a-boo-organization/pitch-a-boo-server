@@ -72,7 +72,14 @@ public class ServerRouter {
                     server.connectedClients.append(connection)
                     session.pausedPlayers.remove(at: playerIndex)
                 }
-                
+            case .updatePlayer:
+                let _ = try! JSONDecoder().decode(DTOPlayerIdentifier.self, from: message.message)
+                guard let player = server.gameSession.players.first(where: { $0 == connection.associatedPlayer} ) else { return }
+                server.sendMessageToClient(
+                    message: DefaultMessage.playerIdentifier(player).load,
+                    client: connection,
+                    completion: { _ in }
+                )
         }
     }
     
@@ -130,12 +137,6 @@ public class ServerRouter {
                         saleResult
                     ).load
                 )
-                server.connectedClients.forEach {
-                    server.sendMessageToClient(
-                        message: DefaultMessage.playerIdentifier($0.associatedPlayer).load,
-                        client: $0
-                    ) { _ in }
-                }
                 server.sendMessageToAllClients(
                     DefaultMessage.startMessage(
                         35,

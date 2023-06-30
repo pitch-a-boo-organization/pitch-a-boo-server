@@ -21,7 +21,7 @@ class ServerMock: Server {
     private(set) var sendedMessageToAllClients: TransferMessage?
     
     var connectedClients: [any Connection] = []
-    var gameSession: GameSession = GameSession(players: [])
+    var gameSession: GameSession = GameSession()
     
     func sendMessageToClient(
         message: PitchABooServer.TransferMessage,
