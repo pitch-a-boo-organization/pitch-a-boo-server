@@ -31,7 +31,6 @@ public class ServerRouter {
                 )
             case .connectToSession:
                 if session.players.count < 7 {
-                    server.connectedClients.append(connection)
                     let playerId = session.players.count
                     let player = Player(
                         id: playerId + 1,
@@ -40,6 +39,10 @@ public class ServerRouter {
                         sellingItem: Item.availableItems[playerId],
                         persona: Persona.availablePersonas[playerId]
                     )
+                    print("Created Player: \(player.name)")
+                    connection.associatedPlayer = player
+                    print("Connection Player: \(connection.associatedPlayer.name)")
+                    server.connectedClients.append(connection)
                     server.gameSession.players.append(player)
                     server.output?.didConectPlayer(players: server.gameSession.players)
                     server.sendMessageToClient(

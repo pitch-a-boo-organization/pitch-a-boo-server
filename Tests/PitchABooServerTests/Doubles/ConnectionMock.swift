@@ -10,6 +10,7 @@ import Network
 @testable import PitchABooServer
 
 class SpyConnection: Connection {
+    var associatedPlayer: PitchABooServer.Player = Player.createAnUndefinedPlayer()
     var stateUpdateHandler: ((NWConnection.State) -> Void)?
     
     func receiveMessage(completion: @escaping (Data?, NWConnection.ContentContext?, Bool, NWError?) -> Void) {

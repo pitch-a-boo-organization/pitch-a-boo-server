@@ -161,29 +161,6 @@ extension PitchABooWebSocketServer {
         }
     }
 
-//    private func didUpdateConnectionState(
-//        _ connection: Connection,
-//        completion: @escaping (WebSocketError?) -> Void
-//    ) {
-//        print("UPDATING CONNECTION STATE")
-//        connection.stateUpdateHandler = { state in
-//            switch state {
-//                case .ready:
-//                    self.sendMessageToClient(
-//                        message: DefaultMessage.canConnectMessage(!self.gameSession.gameHasStarted).load,
-//                        client: connection,
-//                        completion: completion
-//                    )
-//                case .failed(_):
-//                    completion(.cantConnectWithClient)
-//                case .waiting(_):
-//                    completion(.connectTimeWasTooLong)
-//                default:
-//                    break
-//            }
-//        }
-//    }
-    
     func handleMessageFromClient(
         data: Data,
         context: NWConnection.ContentContext,

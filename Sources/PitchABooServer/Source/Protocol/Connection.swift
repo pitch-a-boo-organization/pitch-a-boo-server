@@ -9,7 +9,7 @@ import Foundation
 import Network
 
 public protocol Connection: AnyObject, Identifiable {
-    
+    var associatedPlayer: Player { get set }
     var stateUpdateHandler: ((_ state: NWConnection.State) -> Void)? { get set }
     
     func send(
